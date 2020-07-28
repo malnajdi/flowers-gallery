@@ -11,3 +11,5 @@ class Flower(models.Model):
     image = models.ImageField()
     description = models.TextField()
 
+    def __str__(self):
+        return self.title
