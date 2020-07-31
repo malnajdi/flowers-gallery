@@ -38,7 +38,7 @@
                                         <h3>{{ flower.title }}</h3>
                                         <p>{{ flower.description }}</p>
                                         <ul class="actions">
-                                            <li><a href="#" class="button">More</a></li>
+                                            <li><a href="{% url 'gallery:flower-detail' flower.id %}" class="button">More</a></li>
                                         </ul>
                                     </article>
                                     {% endfor %}

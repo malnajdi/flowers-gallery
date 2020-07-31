@@ -1,4 +1,4 @@
-from django.views.generic import View, TemplateView, ListView
+from django.views.generic import View, TemplateView, ListView, DetailView
 from .models import Flower
 
     
@@ -7,3 +7,9 @@ class HomeView(ListView):
     model = Flower
     context_object_name = 'flowers'
     paginate_by = 2
+
+
+class FlowerDetailView(DetailView):
+    template_name = 'detail.html'
+    model = Flower
+    context_object_name = 'flower'
