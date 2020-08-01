@@ -1,0 +1,63 @@
+{% load static %}
+<!DOCTYPE HTML>
+<!--
+	Editorial by HTML5 UP
+	html5up.net | @ajlkn
+	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
+-->
+<html>
+	<head>
+		<title>Flower Gallary</title>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+		<link rel="stylesheet" href="{% static 'css/main.css' %}" />
+	</head>
+	<body class="is-preload">
+    <!-- Wrapper -->
+        <div id="wrapper">
+        <!-- Main -->
+            <div id="main">
+                <div class="inner">
+
+                <!-- Header -->
+                    <header id="header">
+                        <a href="index.html" class="logo"><strong>Flower Gallary</strong></a>
+                        <ul class="icons">
+                            {% if user.is_authenticated %}
+                            <li><a href="{% url 'logout' %}" class="icon solid fa-sign-out-alt"><span class="label">Logout</span></a></li>
+                            {% else %}
+                            <li><a href="{% url 'login' %}" class="icon solid fa-sign-in-alt"><span class="label">Login</span></a></li>
+                            {% endif %}
+                            <li><a href="#" class="icon solid fa-language"><span class="label">Language</span></a></li>
+                        </ul>
+                    </header>
+
+                <!-- Section -->
+                    <section>
+                        <div class="row gtr-200">
+                            <div class="col-12 col-12-medium">
+                                <h3>Login</h3>
+                                <form method="post" action="#">
+                                    <div class="row gtr-uniform box" style="margin-left: 0;">
+                                        {% csrf_token %}
+                                        {{ form }}
+                                        <div class="col-12 col-12-xsmall">
+                                            <input type='submit' class="button primary" value='Login' />
+                                        </div>                                    
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </section>
+
+                </div>
+            </div>
+        </div>
+		<!-- Scripts -->
+			<script src="{% static 'js/jquery.min.js' %}"></script>
+			<script src="{% static 'js/browser.min.js' %}"></script>
+			<script src="{% static 'js/breakpoints.min.js' %}"></script>
+			<script src="{% static 'js/util.js' %}"></script>
+			<script src="{% static 'js/main.js' %}"></script>
+	</body>
+</html>
