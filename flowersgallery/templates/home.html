@@ -1,4 +1,5 @@
 {% load static %}
+{% load i18n %}
 
 <!DOCTYPE HTML>
 <!--
@@ -28,7 +29,21 @@
                                     {% else %}
                                     <li><a href="{% url 'login' %}" class="icon solid fa-sign-in-alt"><span class="label">Login</span></a></li>
                                     {% endif %}
-                                    <li><a href="#" class="icon solid fa-language"><span class="label">Language</span></a></li>
+                                    <li>
+                                        <form action="{% url 'set_language' %}" method="post">{% csrf_token %}
+                                            {% get_current_language as LANGUAGE_CODE %}                                         
+                                            <input name="next" type="hidden" value="{{ request.get_full_path|slice:'3:' }}">
+                                            {% if LANGUAGE_CODE == 'ar' %}
+                                                <button type='submit' name='language' value='en' class="icon solid fa-language">
+                                                    <span class="label"></span>English
+                                                </button>
+                                            {% else %}
+                                                <button type='submit' name='language' value='ar' class="icon solid fa-language">
+                                                    <span class="label"></span>عربي
+                                                </button>
+                                            {% endif %}
+                                        </form>
+                                    </li>
                                 </ul>
                             </header>
                         <!-- Section -->
@@ -37,10 +52,17 @@
                                     {% for flower in flowers %}
                                     <article>
                                         <a href="#" class="image"><img src="{{ flower.image.url }}" alt="" /></a>
-                                        <h3>{{ flower.title }}</h3>
-                                        <p>{{ flower.description }}</p>
+                                        {% if LANGUAGE_CODE == 'ar' %}
+                                            <h3>{{ flower.title_ar }}</h3>
+                                            <p>{{ flower.description_ar }}</p>
+                                        {% else %}
+                                            <h3>{{ flower.title }}</h3>
+                                            <p>{{ flower.description }}</p>
+                                        {% endif %}
                                         <ul class="actions">
-                                            <li><a href="{% url 'gallery:flower-detail' flower.id %}" class="button">More</a></li>
+                                            <li><a href="{% url 'gallery:flower-detail' flower.id %}" class="button">
+                                                {% trans 'More' %}
+                                            </a></li>
                                         </ul>
                                     </article>
                                     {% endfor %}
