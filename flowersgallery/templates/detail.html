@@ -51,12 +51,39 @@
 							<!-- Content -->
 								<section>
 									<header class="main">
+										<div>
+											Liked: By [
+											{% for action in flower.actions.all %}
+												{% if action.liked == True %}
+													{{ action.user.username }}, 
+												{% endif %}
+											{% endfor %}
+											]
+										</div>
+										<div>
+											DisLiked: By [
+											{% for action in flower.actions.all %}
+												{% if action.liked == False %}
+													{{ action.user.username }}, 
+												{% endif %}
+											{% endfor %}
+											]
+										</div>
 										{% if LANGUAGE_CODE == 'ar' %}
 											<h1>{{ flower.title_ar }}</h1>
 										{% else %}
 											<h1>{{ flower.title }}</h1>
 										{% endif %}
-									</header>
+									
+										{% if user.is_authenticated %}
+										<form method="POST" action="{% url 'interaction:like-flower' flower_id=flower.id %}">
+											{% csrf_token %}											
+												<button type="submit" value="like" name='like'><i class="far fa-heart"></i></button>
+												<button type="submit" value="dislike" name='dislike'><i class="fas fa-heart-broken"></i></button>										
+										</form>
+										{% endif %}
+									
+									</header> 
 
 									<span class="image main"><img src="{{ flower.image.url }}" alt="" /></span>
 										{% if LANGUAGE_CODE == 'ar' %}
