@@ -133,9 +133,6 @@ LOCALE_PATHS = [
 
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, "static")
-STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, "static"),
-]
 
 # Media Settings
 MEDIA_URL = '/media/'
@@ -146,3 +143,8 @@ LOGIN_URL = '/accounts/login/'
 LOGIN_REDIRECT_URL = '/'
 LOGOUT_URL = '/accounts/logout/'
 LOGOUT_REDIRECT_URL = '/'
+
+try:
+    from flowersgallery.local_settings import *
+except ImportError:
+    print('local_settings.py not found')
