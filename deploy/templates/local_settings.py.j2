@@ -1,0 +1,11 @@
+SECRET_KEY = '{{ vault_secret_key }}'
+
+DEBUG = {{ django_debug|string }}
+
+ALLOWED_HOSTS = [
+    '{{ apache_server_names|join("','") }}',
+    '{{ ansible_default_ipv4.address }}',
+]
+
+STATIC_ROOT = '{{ django_project_static_dir }}'
+MEDIA_ROOT = '{{ django_project_media_dir }}'

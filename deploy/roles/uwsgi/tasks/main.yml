@@ -1,0 +1,42 @@
+---
+- name: Install uWSGI python plugin (Python 3)
+  apt: name=uwsgi-plugin-python3 state=present
+  notify: Restart uWSGI Emperor
+
+- name: Create appilcation user
+  user: name="{{ uwsgi_app_user }}" system=yes
+
+- name: Install uWSGI emperor
+  apt: name=uwsgi-emperor state=present
+
+- name: Configure uWSGI emperor
+  template:
+    src: emperor.ini.j2
+    dest: /etc/uwsgi-emperor/emperor.ini
+    owner: root
+    group: root
+    mode: 0644
+  notify: Restart uWSGI Emperor
+
+- name: Create log directory
+  file:
+    path: /var/log/uwsgi/vassals
+    state: directory
+    owner: root
+    group: root
+  notify: Restart uWSGI Emperor
+
+- name: Enable app server configuration (uWSGI emperor)
+  template:
+    src: uwsgi.ini.j2
+    dest: "/etc/uwsgi-emperor/vassals/{{ uwsgi_app_name }}.ini"
+    owner: root
+    group: root
+    mode: 0644
+  notify: Restart application vassal
+
+- name: Ensure Uwsgi pid permissions are not worldwid writable
+  file:
+    path: /run/uwsgi-emperor.pid
+    mode: 0644
+  notify: Restart uWSGI Emperor

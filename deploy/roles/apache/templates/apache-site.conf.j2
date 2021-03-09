@@ -1,0 +1,19 @@
+<VirtualHost *:80>
+
+    ServerName {{ apache_public_url }}
+
+    CustomLog ${APACHE_LOG_DIR}/{{ apache_site_name }}-access.log combined
+    ErrorLog ${APACHE_LOG_DIR}/{{ apache_site_name }}-error.log
+
+    {% for key, value in apache_aliases.items() %}
+        Alias {{ key }} {{ value }}
+        <Directory {{ value }}>
+            Require all granted
+        </Directory>
+        ProxyPass {{ key }} !
+    {% endfor %}
+
+    ProxyPass / uwsgi://localhost:8000/
+    ProxyPassReverse / uwsgi://localhost:8000/
+
+</VirtualHost>

@@ -1,0 +1,8 @@
+---
+- name: Restart uWSGI Emperor
+  service: name=uwsgi-emperor state=restarted
+
+- name: Restart application vassal
+  file:
+    path: "/etc/uwsgi-emperor/vassals/{{ uwsgi_app_name }}.ini"
+    state: touch

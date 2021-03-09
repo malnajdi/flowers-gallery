@@ -1,0 +1,12 @@
+env: production
+django_project_branch: "master"
+
+apache_server_names:
+  - flowers-gallery.malnajdi.com
+  - cloud.digitalocean.com
+  - "{{ inventory_hostname }}"
+
+apache_public_url: https://flowers-gallery.malnajdi.com
+
+django_debug: no
+

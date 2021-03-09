@@ -1,0 +1,14 @@
+dependencies:
+
+  - name: uwsgi
+    uwsgi_app_name: "{{ django_project_name }}"
+    uwsgi_app_dir: "{{ django_project_manage_dir }}"
+    uwsgi_wsgi_file: "{{ django_project_package_name }}/wsgi.py"
+    uwsgi_app_venv_dir: "{{ django_project_venv_dir }}"
+    uwsgi_django_settings_module: "{{ django_project_settings_module }}"
+
+  - name: apache
+    apache_site_name: "{{ django_project_name }}"
+    apache_aliases:
+      "/static/": "{{ django_project_static_dir }}/"
+      "/media/": "{{ django_project_media_dir }}/"

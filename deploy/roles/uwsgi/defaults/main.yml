@@ -1,0 +1,4 @@
+---
+uwsgi_app_user: "{{ uwsgi_app_name }}"
+uwsgi_processes: 2
+uwsgi_wsgi_file: wsgi.py

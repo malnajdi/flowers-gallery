@@ -1,0 +1,15 @@
+---
+django_project_root: "/opt/{{ django_project_name }}"
+django_project_code_dir: "{{ django_project_root }}/code"
+django_project_venv_dir: "{{ django_project_root }}/venv"
+django_project_static_dir: "{{ django_project_root }}/static"
+django_project_media_dir: "{{ django_project_root }}/media"
+django_project_package_name: "{{ django_project_name }}"
+django_project_manage_dir: "{{ django_project_code_dir }}/{{ django_project_package_name }}"
+django_project_settings_module: "{{ django_project_package_name }}.settings"
+django_project_local_settings_path: local_settings.py
+django_project_migrate_database: yes
+django_project_use_uwsgi_emperor: yes
+django_project_internal_server: yes
+django_project_app_server: uwsgi
+django_project_web_server: apache

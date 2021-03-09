@@ -1,0 +1,34 @@
+- name: Install apache webserver
+  apt: name=apache2 state=present
+
+- name: Install apache module for uwsgi
+  apt: name=libapache2-mod-proxy-uwsgi state=present
+
+- name: Enable apache uwsgi module
+  apache2_module: name="{{ item }}" state=present
+  loop:
+    - proxy
+    - proxy_uwsgi
+  notify: Restart apache
+
+- name: Disable default apache site
+  file:
+    path: /etc/apache2/sites-enabled/000-default.conf
+    state: absent
+  notify: Reload apache
+
+- name: Configure apache site
+  template:
+    src: apache-site.conf.j2
+    dest: /etc/apache2/sites-available/{{ apache_site_name }}.conf
+    owner: root
+    group: root
+    mode: 0644
+  notify: Reload apache
+
+- name: Enable apache site
+  file:
+    src: /etc/apache2/sites-available/{{ apache_site_name }}.conf
+    dest: /etc/apache2/sites-enabled/{{ apache_site_name }}.conf
+    state: link
+  notify: Reload apache

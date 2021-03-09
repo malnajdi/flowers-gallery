@@ -1,0 +1,24 @@
+- name: Deploy Application
+  hosts: application_servers
+  # become: yes
+  # become_user: root
+
+  vars:
+    django_project_name: flowers-gallery
+    django_project_admin_username: malnajdi
+    django_project_admin_email: flowersgallery@malnajdi.com
+    django_project_package_name: flowersgallery
+
+    admins:
+      - name: flowersgallery
+        email: flowersgallery@malnajdi.com
+    
+    uwsgi_processes: 10
+
+  pre_tasks:
+    - name: Generate local settings
+      set_fact:
+        django_project_local_settings: "{{ lookup('template', 'local_settings.py.j2') }}"
+
+  roles:
+    - django-project

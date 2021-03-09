@@ -1,0 +1,24 @@
+[uwsgi]
+processes = {{ uwsgi_processes }}
+chdir = {{ uwsgi_app_dir }}
+wsgi-file = {{ uwsgi_wsgi_file }}
+virtualenv = {{ uwsgi_app_venv_dir }}
+env = DJANGO_SETTINGS_MODULE={{ uwsgi_django_settings_module }}
+master = true
+vacuum = true
+uid = {{ uwsgi_app_user }}
+gid = {{ uwsgi_app_user }}
+umask = 022
+socket = 127.0.0.1:8000
+chown-socket = {{ uwsgi_app_name }}:www-data
+chmod-socket = 660
+cpu-affinity = 1
+max-requests = 5000
+no-orphans = true
+log-date = true
+die-on-term = true
+auto-procname = true
+procname-prefix = {{ uwsgi_app_name }}|
+thunder-lock = true
+plugins = python3
+logto = /var/log/uwsgi/vassals/{{ uwsgi_app_name }}.log

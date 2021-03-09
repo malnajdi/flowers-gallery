@@ -1,0 +1,94 @@
+---
+- name: Install required software packages
+  apt:
+    name: ['build-essential', 'libpq-dev', 'libjpeg-dev',
+           'python3', 'python3-dev', 'python3-virtualenv',
+           'virtualenvwrapper', 'gettext', 'libfreetype6-dev',
+           'git']
+    state: present
+  tags: django
+
+- name: Create appilcation user
+  user: name="{{ django_project_name }}" system=yes
+  tags: django
+
+- name: Get the application code
+  git:
+    repo: "git@github.com:malnajdi/{{ django_project_name }}.git"
+    dest: "{{ django_project_code_dir }}"
+    version: "{{ django_project_branch }}"
+    force: yes
+  when: django_project_internal_server
+  notify: Restart application vassal
+  tags: django
+
+- name: Configure application
+  copy:
+    content: "{{ django_project_local_settings }}"
+    dest: "{{ django_project_manage_dir }}/{{ django_project_package_name }}/{{ django_project_local_settings_path }}"
+    owner: root
+    group: "{{ django_project_name }}"
+    mode: 0640
+  notify: Restart application vassal
+  tags: django
+
+- name: Set file permissions for the code directory
+  file:
+    path: "{{ django_project_code_dir }}"
+    owner: root
+    group: "{{ django_project_name }}"
+    mode: "u=rwX,g=rX,o="
+    recurse: yes
+  tags: django
+
+- name: Create virtualenv and install requirements
+  pip:
+    virtualenv: "{{ django_project_venv_dir }}"
+    virtualenv_python: python3
+    requirements: "{{ django_project_code_dir }}/requirements.txt"
+    extra_args: --upgrade
+  environment: "{{ django_project_env_vars | default({}) }}"
+  notify: Restart application vassal
+  tags: django
+
+- name: Migrate database
+  django_manage:
+    command: migrate
+    app_path: "{{ django_project_manage_dir }}"
+    virtualenv: "{{ django_project_venv_dir }}"
+  environment: "{{ django_project_env_vars | default({}) }}"
+  tags: django
+
+- name: Compile Arabic translation messages
+  django_manage:
+    command: compilemessages --locale ar
+    app_path: "{{ django_project_manage_dir }}"
+    virtualenv: "{{ django_project_venv_dir }}"
+  environment: "{{ django_project_env_vars | default({}) }}"
+  tags: django
+
+- name: Create static files directory
+  file:
+    path: "{{ django_project_static_dir }}"
+    state: directory
+    owner: root
+    group: www-data
+    mode: "u=rwX,g=rX,o="
+  tags: django
+
+- name: Create media directory
+  file:
+    path: "{{ django_project_media_dir }}"
+    state: directory
+    owner: "{{ django_project_name }}"
+    group: www-data
+    mode: "u=rwX,g=rX,o="
+  tags: django
+
+- name: Collect static assets
+  django_manage:
+    command: collectstatic
+    app_path: "{{ django_project_manage_dir }}"
+    virtualenv: "{{ django_project_venv_dir }}"
+  environment: "{{ django_project_env_vars | default({}) }}"
+  tags: django
