@@ -18,7 +18,6 @@
     dest: "{{ django_project_code_dir }}"
     version: "{{ django_project_branch }}"
     force: yes
-  when: django_project_internal_server
   notify: Restart application vassal
   tags: django
 
@@ -92,3 +91,19 @@
     virtualenv: "{{ django_project_venv_dir }}"
   environment: "{{ django_project_env_vars | default({}) }}"
   tags: django
+
+# Only due the use of sqlite  
+- name: Set file permissions for project root direcotry
+  file:
+    path: "{{ django_project_root }}"
+    owner: "{{ django_project_name }}"
+    group: root
+  tags: django
+
+- name: Set file permissions for the db.sqlite3
+  file:
+    path: "{{ django_project_root }}/db.sqlite3"
+    owner: "{{ django_project_name }}"
+    group: www-data
+    mode: 0664
+  tags: django  

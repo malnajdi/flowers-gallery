@@ -7,5 +7,12 @@ ALLOWED_HOSTS = [
     '{{ ansible_default_ipv4.address }}',
 ]
 
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': '{{ django_project_root }}/db.sqlite3',
+    }
+}
+
 STATIC_ROOT = '{{ django_project_static_dir }}'
 MEDIA_ROOT = '{{ django_project_media_dir }}'

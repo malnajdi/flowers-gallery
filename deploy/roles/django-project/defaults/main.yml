@@ -8,8 +8,3 @@ django_project_package_name: "{{ django_project_name }}"
 django_project_manage_dir: "{{ django_project_code_dir }}/{{ django_project_package_name }}"
 django_project_settings_module: "{{ django_project_package_name }}.settings"
 django_project_local_settings_path: local_settings.py
-django_project_migrate_database: yes
-django_project_use_uwsgi_emperor: yes
-django_project_internal_server: yes
-django_project_app_server: uwsgi
-django_project_web_server: apache
