@@ -144,6 +144,10 @@ LOGIN_REDIRECT_URL = '/'
 LOGOUT_URL = '/accounts/logout/'
 LOGOUT_REDIRECT_URL = '/'
 
+DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+AUTH_USER_MODEL = 'interaction.User'
+
 try:
     from flowersgallery.local_settings import *
 except ImportError:
