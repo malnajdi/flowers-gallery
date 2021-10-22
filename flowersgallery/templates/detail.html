@@ -81,11 +81,14 @@
 												<button type="submit" value="like" name='like'><i class="far fa-heart"></i></button>
 												<button type="submit" value="dislike" name='dislike'><i class="fas fa-heart-broken"></i></button>										
 										</form>
+										<a href="{% url 'gallery:flower-update' pk=flower.id %}">Edit</a>
+										<a href="{% url 'gallery:flower-delete' pk=flower.id %}">delete</a>
 										{% endif %}
 									
 									</header> 
-
+									{% if flower.image %}
 									<span class="image main"><img src="{{ flower.image.url }}" alt="" /></span>
+									{% endif %}
 										{% if LANGUAGE_CODE == 'ar' %}
 											<p>{{ flower.description_ar }}</p>
 										{% else %}

@@ -1,7 +1,7 @@
-from django.views.generic.edit import FormView
+from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.views.generic import View, TemplateView, ListView, DetailView
 from .models import Flower
-from .forms import ContactUsForm
+from .forms import FlowerForm
 
     
 class HomeView(ListView):
@@ -17,16 +17,22 @@ class FlowerDetailView(DetailView):
     context_object_name = 'flower'
 
 
-class ContactUsView(FormView):
-    template_name = "contact_us.html"
-    form_class = ContactUsForm
+class FlowerCreateView(CreateView):
+    model = Flower
+    template_name = "create_flower.html"
+    form_class = FlowerForm
     success_url = '/'
 
-    def form_valid(self, form):
-        print(form)
-        print('form was submitted successfully...')
-        return super().form_valid(form)
 
-    # def form_invalid(self, form):
-    #     pass
+class FlowerUpdateView(UpdateView):
+    model = Flower
+    template_name = "update_flower.html"
+    form_class = FlowerForm
+    success_url = '/'
 
+
+class FlowerDeleteView(DeleteView):
+    model = Flower
+    template_name = "delete_flower.html"
+    form_class = FlowerForm
+    success_url = '/'
