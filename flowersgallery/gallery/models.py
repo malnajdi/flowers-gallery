@@ -12,6 +12,9 @@ class Flower(models.Model):
     image = models.ImageField()
     description = models.TextField()
     description_ar = models.TextField()
-
+    user = models.ForeignKey(
+        'interaction.User',
+        on_delete=models.CASCADE
+        )
     def __str__(self):
         return self.title

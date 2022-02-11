@@ -1,7 +1,7 @@
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.views.generic import View, TemplateView, ListView, DetailView
 from .models import Flower
-from .forms import FlowerForm
+from .forms import FlowerForm, FlowerUpdateForm
 
     
 class HomeView(ListView):
@@ -27,8 +27,23 @@ class FlowerCreateView(CreateView):
 class FlowerUpdateView(UpdateView):
     model = Flower
     template_name = "update_flower.html"
-    form_class = FlowerForm
+    form_class = FlowerUpdateForm
     success_url = '/'
+
+    def form_valid(self, form):
+        self.object = form.save(commit=False)
+        self.object.user = self.request.user
+        self.object.save()
+        return super().form_valid(form)
+
+    # def form_invalid(self, form):
+    #     pass
+
+    def get_context_data(self, *args, **kwargs):
+        kwargs.update({
+            'test': 'test'
+        })
+        return super().get_context_data(*args, **kwargs)
 
 
 class FlowerDeleteView(DeleteView):

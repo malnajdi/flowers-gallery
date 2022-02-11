@@ -23,6 +23,8 @@
                     <form method="post" enctype="multipart/form-data">
                         {% csrf_token %}
                         {{ form }}
+						<br>
+						{{ test }}
                         <input type="submit" value="Update">
                     </form>
                 </div>
