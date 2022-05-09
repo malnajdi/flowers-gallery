@@ -1,41 +1,13 @@
+{% extends "base.html" %}
 {% load static %}
 {% load i18n %}
 
-<!DOCTYPE HTML>
-<!--
-	Editorial by HTML5 UP
-	html5up.net | @ajlkn
-	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
--->
-<html>
-	<head>
-		<title>Flower Gallary</title>
-		<meta charset="utf-8" />
-		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
-        <link rel="stylesheet" href="{% static 'css/main.css' %}" />
-	</head>
-	<body class="is-preload">
-		<!-- Wrapper -->
-        <div id="wrapper">
-            <!-- Main -->
-            <div id="main">
-                <div class="inner">
-                    <form method="post" enctype="multipart/form-data">
-                        {% csrf_token %}
-                        {{ form }}
-						<br>
-						{{ test }}
-                        <input type="submit" value="Update">
-                    </form>
-                </div>
-            </div>
-        </div>
-		<!-- Scripts -->
-			<script src="{% static 'js/jquery.min.js' %}"></script>
-			<script src="{% static 'js/browser.min.js' %}"></script>
-			<script src="{% static 'js/breakpoints.min.js' %}"></script>
-			<script src="{% static 'js/util.js' %}"></script>
-			<script src="{% static 'js/main.js' %}"></script>
-
-	</body>
-</html>
+{% block content %}
+<form method="post" enctype="multipart/form-data">
+	{% csrf_token %}
+	{{ form }}
+	<br>
+	{{ test }}
+	<input type="submit" value="Update">
+</form>
+{% endblock %}

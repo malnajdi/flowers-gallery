@@ -1,0 +1,28 @@
+{% load i18n %}
+
+<!-- Header -->
+<header id="header">
+    <a href="/" class="logo"><strong>Flower Gallary</strong></a>
+    <ul class="icons">
+        {% if user.is_authenticated %}
+        <li><a href="{% url 'logout' %}" class="icon solid fa-sign-out-alt"><span class="label">Logout</span></a></li>
+        {% else %}
+        <li><a href="{% url 'login' %}" class="icon solid fa-sign-in-alt"><span class="label">Login</span></a></li>
+        {% endif %}
+        <li>
+            <form action="{% url 'set_language' %}" method="post">{% csrf_token %}
+                {% get_current_language as LANGUAGE_CODE %}                                         
+                <input name="next" type="hidden" value="{{ request.get_full_path|slice:'3:' }}">
+                {% if LANGUAGE_CODE == 'ar' %}
+                    <button type='submit' name='language' value='en' class="icon solid fa-language">
+                        <span class="label"></span>English
+                    </button>
+                {% else %}
+                    <button type='submit' name='language' value='ar' class="icon solid fa-language">
+                        <span class="label"></span>عربي
+                    </button>
+                {% endif %}
+            </form>
+        </li>
+    </ul>
+</header>

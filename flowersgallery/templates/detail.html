@@ -1,111 +1,54 @@
+{% extends "base.html" %}
 {% load static %}
 {% load i18n %}
 
-<!DOCTYPE HTML>
-<!--
-	Editorial by HTML5 UP
-	html5up.net | @ajlkn
-	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
--->
-<html>
-	<head>
-		<title>Flower Gallary</title>
-		<meta charset="utf-8" />
-		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
-		<link rel="stylesheet" href="{% static 'css/main.css' %}" />
-	</head>
-	<body class="is-preload">
-
-		<!-- Wrapper -->
-			<div id="wrapper">
-
-				<!-- Main -->
-					<div id="main">
-						<div class="inner">
-							<!-- Header -->
-							<header id="header">
-								<a href="/" class="logo"><strong>Flower Gallary</strong></a>
-								<ul class="icons">
-									{% if user.is_authenticated %}
-									<li><a href="{% url 'logout' %}" class="icon solid fa-sign-out-alt"><span class="label">Logout</span></a> {{ user.username }}</li>
-									{% else %}
-									<li><a href="{% url 'login' %}" class="icon solid fa-sign-in-alt"><span class="label">Login</span></a></li>
-									{% endif %}
-									<li>
-                                        <form action="{% url 'set_language' %}" method="post">{% csrf_token %}
-                                            {% get_current_language as LANGUAGE_CODE %}                                         
-                                            <input name="next" type="hidden" value="{{ request.get_full_path|slice:'3:' }}">
-                                            {% if LANGUAGE_CODE == 'ar' %}
-                                                <button type='submit' name='language' value='en' class="icon solid fa-language">
-                                                    <span class="label"></span>English
-                                                </button>
-                                            {% else %}
-                                                <button type='submit' name='language' value='ar' class="icon solid fa-language">
-                                                    <span class="label"></span>عربي
-                                                </button>
-                                            {% endif %}
-                                        </form>
-                                    </li>
-								</ul>
-							</header>
-							<!-- Content -->
-								<section>
-									<header class="main">
-										<div>
-											Liked: By [
-											{% for action in flower.actions.all %}
-												{% if action.liked == True %}
-													{{ action.user.username }}, 
-												{% endif %}
-											{% endfor %}
-											]
-										</div>
-										<div>
-											DisLiked: By [
-											{% for action in flower.actions.all %}
-												{% if action.liked == False %}
-													{{ action.user.username }}, 
-												{% endif %}
-											{% endfor %}
-											]
-										</div>
-										<div>{{ flower.user.username }}</div>
-										{% if LANGUAGE_CODE == 'ar' %}
-											<h1>{{ flower.title_ar }}</h1>
-										{% else %}
-											<h1>{{ flower.title }}</h1>
-										{% endif %}
-									
-										{% if user.is_authenticated %}
-										<form method="POST" action="{% url 'interaction:like-flower' flower_id=flower.id %}">
-											{% csrf_token %}											
-												<button type="submit" value="like" name='like'><i class="far fa-heart"></i></button>
-												<button type="submit" value="dislike" name='dislike'><i class="fas fa-heart-broken"></i></button>										
-										</form>
-										<a href="{% url 'gallery:flower-update' pk=flower.id %}">Edit</a>
-										<a href="{% url 'gallery:flower-delete' pk=flower.id %}">delete</a>
-										{% endif %}
-									
-									</header> 
-									{% if flower.image %}
-									<span class="image main"><img src="{{ flower.image.url }}" alt="" /></span>
-									{% endif %}
-										{% if LANGUAGE_CODE == 'ar' %}
-											<p>{{ flower.description_ar }}</p>
-										{% else %}
-											<p>{{ flower.description }}</p>
-										{% endif %}
-								</section>
-						</div>
-					</div>
-			</div>
-
-		<!-- Scripts -->
-			<script src="{% static 'js/jquery.min.js' %}"></script>
-			<script src="{% static 'js/browser.min.js' %}"></script>
-			<script src="{% static 'js/breakpoints.min.js' %}"></script>
-			<script src="{% static 'js/util.js' %}"></script>
-			<script src="{% static 'js/main.js' %}"></script>
-
-	</body>
-</html>
+{% block content %}
+<!-- Content -->
+<section>
+	<header class="main">
+		<div>
+			Liked: By [
+			{% for action in flower.actions.all %}
+				{% if action.liked == True %}
+					{{ action.user.username }}, 
+				{% endif %}
+			{% endfor %}
+			]
+		</div>
+		<div>
+			DisLiked: By [
+			{% for action in flower.actions.all %}
+				{% if action.liked == False %}
+					{{ action.user.username }}, 
+				{% endif %}
+			{% endfor %}
+			]
+		</div>
+		<div>{{ flower.user.username }}</div>
+		{% if LANGUAGE_CODE == 'ar' %}
+			<h1>{{ flower.title_ar }}</h1>
+		{% else %}
+			<h1>{{ flower.title }}</h1>
+		{% endif %}
+	
+		{% if user.is_authenticated %}
+			<form method="POST" action="{% url 'interaction:like-flower' flower_id=flower.id %}">
+				{% csrf_token %}											
+					<button type="submit" value="like" name='like'><i class="far fa-heart"></i></button>
+					<button type="submit" value="dislike" name='dislike'><i class="fas fa-heart-broken"></i></button>										
+			</form>
+			<a href="{% url 'gallery:flower-update' pk=flower.id %}">Edit</a>
+			<a href="{% url 'gallery:flower-delete' pk=flower.id %}">delete</a>
+		{% endif %}
+	
+	</header> 
+	{% if flower.image %}
+		<span class="image main"><img src="{{ flower.image.url }}" alt="" /></span>
+	{% endif %}
+	{% if LANGUAGE_CODE == 'ar' %}
+		<p>{{ flower.description_ar }}</p>
+	{% else %}
+		<p>{{ flower.description }}</p>
+	{% endif %}
+</section>
+{% endblock %}
