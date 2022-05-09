@@ -1,5 +1,10 @@
+from django.forms import ModelForm
+from django.http import HttpResponseRedirect
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.views.generic import View, TemplateView, ListView, DetailView
+
+from extra_views import ModelFormSetView
+
 from .models import Flower
 from .forms import FlowerForm, FlowerUpdateForm
 
@@ -17,11 +22,25 @@ class FlowerDetailView(DetailView):
     context_object_name = 'flower'
 
 
-class FlowerCreateView(CreateView):
+class FlowerCreateView(ModelFormSetView):
     model = Flower
     template_name = "create_flower.html"
     form_class = FlowerForm
     success_url = '/'
+
+    def formset_valid(self, formset):
+        obj = []
+
+        self.object_list = formset.save(commit=False)
+        for object in self.object_list:
+            object.user = self.request.user
+            obj.append(object)
+            # object.save()
+        Flower.objects.bulk_update(
+            obj, ['title', 'title_ar', 'image', 'description', 'description_ar', 'user']
+        )
+        return HttpResponseRedirect(self.get_success_url())
+
 
 
 class FlowerUpdateView(UpdateView):
