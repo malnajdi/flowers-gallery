@@ -13,7 +13,8 @@ class HomeView(ListView):
     template_name = 'home.html'
     model = Flower
     context_object_name = 'flowers'
-    paginate_by = 2
+    paginate_by = 3
+    queryset = Flower.with_images.all()
 
 
 class FlowerDetailView(DetailView):
@@ -35,10 +36,7 @@ class FlowerCreateView(ModelFormSetView):
         for object in self.object_list:
             object.user = self.request.user
             obj.append(object)
-            # object.save()
-        Flower.objects.bulk_update(
-            obj, ['title', 'title_ar', 'image', 'description', 'description_ar', 'user']
-        )
+            object.save()
         return HttpResponseRedirect(self.get_success_url())
 
 
