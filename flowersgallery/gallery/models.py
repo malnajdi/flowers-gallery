@@ -6,6 +6,9 @@ class FlowersWithImageManager(models.Manager):
 
 
 class Flower(models.Model):
+    class Meta:
+        permissions = [('test_flower', 'Test Flower')]
+        
     '''
     title
     image
