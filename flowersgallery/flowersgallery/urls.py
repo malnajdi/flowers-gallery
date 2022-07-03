@@ -9,6 +9,7 @@ urlpatterns = [
 ]
 
 urlpatterns += i18n_patterns(
+    path('__debug__/', include('debug_toolbar.urls')),
     path('admin/', admin.site.urls),
     path('', include('gallery.urls')),
     path('', include('interaction.urls')),

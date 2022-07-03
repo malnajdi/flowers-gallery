@@ -25,7 +25,11 @@ SECRET_KEY = 'logy^j8u1ifc5_(+kj%h4vsj6nt559h2ark#0_k6(1phj5#si-'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [
+    '*',
+    '140.14.14.101',
+    '140.14.14.102'
+]
 
 
 # Application definition
@@ -40,9 +44,11 @@ INSTALLED_APPS = [
     'gallery',
     'interaction',
     'extra_views',
+    "debug_toolbar",
 ]
 
 MIDDLEWARE = [
+    "debug_toolbar.middleware.DebugToolbarMiddleware",
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.locale.LocaleMiddleware',
@@ -51,6 +57,10 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+]
+
+AUTHENTICATION_BACKENDS = [
+    'django.contrib.auth.backends.RemoteUserBackend',
 ]
 
 ROOT_URLCONF = 'flowersgallery.urls'
@@ -69,6 +79,7 @@ TEMPLATES = [
                 'django.contrib.auth.context_processors.auth',
                 'django.template.context_processors.i18n',
                 'django.contrib.messages.context_processors.messages',
+                'gallery.hostname_context.hostname',
             ],
         },
     },
@@ -132,7 +143,7 @@ LOCALE_PATHS = [
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
 
-STATIC_URL = '/static/'
+STATIC_URL = 'static/'
 STATIC_ROOT = os.path.join(BASE_DIR, "static")
 
 # Media Settings
@@ -142,14 +153,20 @@ MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 # Auth Settings
 LOGIN_URL = '/accounts/login/'
 LOGIN_REDIRECT_URL = '/'
-LOGOUT_URL = '/accounts/logout/'
+LOGOUT_URL = '/accounts/login?logout='
 LOGOUT_REDIRECT_URL = '/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 AUTH_USER_MODEL = 'interaction.User'
 
+INTERNAL_IPS = [
+    "127.0.0.1",
+    "localhost"
+]
+
 try:
     from flowersgallery.local_settings import *
 except ImportError:
     print('local_settings.py not found')
+

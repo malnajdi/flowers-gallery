@@ -1,8 +1,12 @@
 from django.forms import ModelForm
 from django.http import HttpResponseRedirect
+from django.shortcuts import render
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.views.generic import View, TemplateView, ListView, DetailView
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
+import asyncio
+from django.http import HttpResponse
+from django.views import View
 
 from extra_views import ModelFormSetView
 
@@ -31,7 +35,7 @@ class FlowerCreateView(LoginRequiredMixin, PermissionRequiredMixin, ModelFormSet
     success_url = '/'
     login_url = '/accounts/login/'
     permission_required = 'gallery.add_flower'
-    
+
 
     def formset_valid(self, formset):
         obj = []
@@ -75,3 +79,15 @@ class FlowerDeleteView(LoginRequiredMixin, DeleteView):
     form_class = FlowerForm
     success_url = '/'
     login_url = '/accounts/login/'
+
+
+class AsyncView(View):
+    async def get(self, request, *args, **kwargs):
+        # Perform view logic using await.
+        result = []
+        async for flower in Flower.objects.all():
+            result.append(flower)
+
+        flower = await Flower.objects.filter(user__username='malnajdi').afirst()
+
+        return render(request, "index.html", {"results": result, "flower": flower})
