@@ -4,7 +4,7 @@ from .views import RegisterView
 
 
 urlpatterns = [
-    path('login/', LoginView.as_view(), name='login'),
+    path('login/', LoginView.as_view(redirect_authenticated_user=True), name='login'),
     path('logout/', LogoutView.as_view(), name='logout'),
     path('register/', RegisterView.as_view(), name='register')
 ]
