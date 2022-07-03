@@ -2,12 +2,12 @@
 
 <!-- Header -->
 <header id="header">
-    <a href="/" class="logo"><strong>Flower Gallary</strong></a>
+    <a href="/" class="logo"><strong>Flower Gallary | {{ hostname }}</strong></a>
     <ul class="icons">
         {% if user.is_authenticated %}
-        <li><a href="{% url 'logout' %}" class="icon solid fa-sign-out-alt"><span class="label">Logout</span></a></li>
+        <li><a href="{{ LOGOUT_URL }}" class="icon solid fa-sign-out-alt"><span class="label">Logout</span></a></li>
         {% else %}
-        <li><a href="{% url 'login' %}" class="icon solid fa-sign-in-alt"><span class="label">Login</span></a></li>
+        <li><a href="{{ LOGIN_URL }}" class="icon solid fa-sign-in-alt"><span class="label">Login</span></a></li>
         {% endif %}
         <li>
             <form action="{% url 'set_language' %}" method="post">{% csrf_token %}
