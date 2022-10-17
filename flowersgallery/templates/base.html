@@ -13,6 +13,10 @@
 		<meta charset="utf-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
         <link rel="stylesheet" href="{% static 'css/main.css' %}" />
+        {% get_current_language as LANGUAGE_CODE %}
+        {% if LANGUAGE_CODE == 'ar' %}
+            <link rel="stylesheet" href="{% static 'css/main_ar.css' %}" />
+        {% endif %}
 	</head>
 	<body class="is-preload">
 		<!-- Wrapper -->
